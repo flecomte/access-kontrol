@@ -3,6 +3,7 @@ plugins {
     `maven-publish`
     kotlin("jvm") version "+"
     id("net.nemerosa.versioning") version "+"
+    id("org.jlleitschuh.gradle.ktlint") version "+"
     id("org.sonarqube") version "+"
 }
 
@@ -12,6 +13,14 @@ version = versioning.info.run {
         versioning.info.full
     } else {
         versioning.info.lastTag
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "11"
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
     }
 }
 
@@ -54,10 +63,18 @@ publishing {
         }
     } else {
         org.slf4j.LoggerFactory.getLogger("gradle")
-                .error("The git is DIRTY (${versioning.info.full})")
+            .error("The git is DIRTY (${versioning.info.full})")
     }
 }
 
 repositories {
     mavenCentral()
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.+")
 }

@@ -53,6 +53,19 @@ jobs:
         gradle-version: '7.1'
         arguments: test
 
+    - name: Coverage
+      uses: eskatos/gradle-command-action@v1
+      with:
+        gradle-version: '7.1'
+        arguments: jacocoTestReport
+
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v1
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
     - name: Push analyse to sonarqube
       uses: eskatos/gradle-command-action@v1
       env:
