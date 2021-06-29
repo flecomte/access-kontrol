@@ -7,7 +7,7 @@ plugins {
     id("org.sonarqube") version "+"
 }
 
-group "io.github.flecomte"
+group = "io.github.flecomte"
 version = versioning.info.run {
     if (dirty) {
         versioning.info.full
@@ -42,29 +42,33 @@ val sourcesJar by tasks.registering(Jar::class) {
 }
 
 publishing {
-    if (versioning.info.dirty == false) {
-        repositories {
-            maven {
-                name = "skilningur"
-                group = "io.github.flecomte"
-                url = uri("https://maven.pkg.github.com/flecomte/skilningur")
-                credentials {
-                    username = System.getenv("GITHUB_USERNAME")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
+    repositories {
+        maven {
+            name = "access-control"
+            url = uri("https://maven.pkg.github.com/flecomte/access-control")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
-
-        publications {
-            create<MavenPublication>("skilningur") {
-                from(components["java"])
-                artifact(sourcesJar)
-            }
-        }
-    } else {
-        org.slf4j.LoggerFactory.getLogger("gradle")
-            .error("The git is DIRTY (${versioning.info.full})")
     }
+
+    publications {
+        create<MavenPublication>("access-control") {
+            from(components["java"])
+            artifact(sourcesJar)
+        }
+    }
+}
+
+tasks.withType<PublishToMavenRepository>().configureEach {
+    onlyIf {
+        versioning.info.run {
+            !dirty && tag != null && tag.matches("""[0-9]+\.[0-9]+\.[0-9]+""".toRegex())
+        }
+    }
+
+    dependsOn(tasks.test)
 }
 
 repositories {
