@@ -44,8 +44,8 @@ val sourcesJar by tasks.registering(Jar::class) {
 publishing {
     repositories {
         maven {
-            name = "access-control"
-            url = uri("https://maven.pkg.github.com/flecomte/access-control")
+            name = "access-kontrol"
+            url = uri("https://maven.pkg.github.com/flecomte/access-kontrol")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
@@ -54,7 +54,7 @@ publishing {
     }
 
     publications {
-        create<MavenPublication>("access-control") {
+        create<MavenPublication>("access-kontrol") {
             from(components["java"])
             artifact(sourcesJar)
         }

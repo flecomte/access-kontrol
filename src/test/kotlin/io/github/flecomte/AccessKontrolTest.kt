@@ -13,7 +13,7 @@ data class MyObject(
     val title: String
 )
 
-class AccessControlSample : AccessControl() {
+class AccessControlSample : AccessKontrol() {
     fun canView(myObject: MyObject, user: User?): AccessResponse {
         return if (myObject.title == "granted" && user != null) {
             granted("ok")
@@ -29,7 +29,7 @@ class AccessControlSample : AccessControl() {
     }
 }
 
-class AccessControlTest {
+class AccessKontrolTest {
     @Test
     fun `test granted`() {
         AccessControlSample().run {

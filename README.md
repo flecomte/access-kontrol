@@ -1,18 +1,18 @@
 # Access Kontrol
 Helpers to create a simple Access Control in kotlin
 
-[![Tests](https://github.com/flecomte/access-control/actions/workflows/tests.yml/badge.svg)](https://github.com/flecomte/access-control/actions/workflows/tests.yml)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-control&metric=coverage)](https://sonarcloud.io/dashboard?id=flecomte_access-control)
+[![Tests](https://github.com/flecomte/access-kontrol/actions/workflows/tests.yml/badge.svg)](https://github.com/flecomte/access-kontrol/actions/workflows/tests.yml)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-kontrol&metric=coverage)](https://sonarcloud.io/dashboard?id=flecomte_access-kontrol)
 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-control&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=flecomte_access-control)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-control&metric=ncloc)](https://sonarcloud.io/dashboard?id=flecomte_access-control)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-kontrol&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=flecomte_access-kontrol)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-kontrol&metric=ncloc)](https://sonarcloud.io/dashboard?id=flecomte_access-kontrol)
 
 
 ## Example
 
 Define AC
 ```kotlin
-class AccessControlSample : AccessControl() {
+class AccessControlSample : AccessKontrol() {
     /** The user can view the object if it is connected and if it is the creator */
     fun canView(myObject: MyObject, user: User?): AccessResponse {
         return if (user != null && myObject.createdBy == user) {

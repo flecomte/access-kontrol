@@ -1,6 +1,6 @@
 package io.github.flecomte
 
-/** Responses of AccessControl */
+/** Responses of AccessKontrol */
 enum class AccessDecision {
     GRANTED,
     DENIED;
@@ -14,7 +14,7 @@ enum class AccessDecision {
     }
 }
 
-abstract class AccessControl {
+abstract class AccessKontrol {
     /**
      * A Shortcut for return a GrantedResponse
      */
@@ -39,9 +39,9 @@ abstract class AccessControl {
 }
 
 /**
- * Throw an Exception if AccessControl return a DENIED response
+ * Throw an Exception if AccessKontrol return a DENIED response
  */
-fun <T : AccessControl> T.assert(action: T.() -> AccessResponse) {
+fun <T : AccessKontrol> T.assert(action: T.() -> AccessResponse) {
     action().assert()
 }
 
@@ -109,13 +109,13 @@ class AccessDeniedException(val accessResponses: AccessResponses) : Throwable(ac
 }
 
 /**
- * The response that all AccessControl method return
+ * The response that all AccessKontrol method return
  * @see GrantedResponse
  * @see DeniedResponse
  */
 sealed class AccessResponse(
     val decision: AccessDecision,
-    val accessControl: AccessControl,
+    val accessControl: AccessKontrol,
     val message: String?,
     val code: String?
 ) {
@@ -135,13 +135,13 @@ sealed class AccessResponse(
 }
 
 open class GrantedResponse(
-    accessControl: AccessControl,
+    accessControl: AccessKontrol,
     message: String? = null,
     code: String? = null
 ) : AccessResponse(AccessDecision.GRANTED, accessControl, message, code)
 
 open class DeniedResponse(
-    accessControl: AccessControl,
+    accessControl: AccessKontrol,
     message: String,
     code: String
 ) : AccessResponse(AccessDecision.DENIED, accessControl, message, code)

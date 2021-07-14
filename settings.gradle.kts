@@ -1,1 +1,1 @@
-rootProject.name = "access-control"
+rootProject.name = "access-kontrol"
