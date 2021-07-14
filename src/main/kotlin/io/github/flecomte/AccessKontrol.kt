@@ -62,8 +62,8 @@ fun AccessResponses.assert() {
         throw AccessDeniedException(this)
     }
 }
-val AccessResponses.grantedResponses get(): AccessResponses = this.filterIsInstance<GrantedResponse>()
-val AccessResponses.deniedResponses get(): AccessResponses = this.filterIsInstance<DeniedResponse>()
+val AccessResponses.grantedResponses get(): List<GrantedResponse> = this.filterIsInstance<GrantedResponse>()
+val AccessResponses.deniedResponses get(): List<DeniedResponse> = this.filterIsInstance<DeniedResponse>()
 
 /**
  * Convert responses as boolean
@@ -77,6 +77,9 @@ class AccessDeniedException(val accessResponses: AccessResponses) : Throwable(ac
      * Get first response
      */
     fun first(): AccessResponse = accessResponses.deniedResponses.first()
+
+    val deniedResponses: List<DeniedResponse>
+        get() = this.accessResponses.deniedResponses
 
     /**
      * Check if the error code is present into the responses
@@ -97,12 +100,12 @@ class AccessDeniedException(val accessResponses: AccessResponses) : Throwable(ac
      */
     fun getMessages(): List<String> = accessResponses
         .deniedResponses
-        .map { it.message!! }
+        .map { it.message }
 
     /**
      * Get the first message
      */
-    fun getFirstMessage(): String? = accessResponses
+    fun getFirstMessage(): String = accessResponses
         .deniedResponses
         .first()
         .message
@@ -116,8 +119,8 @@ class AccessDeniedException(val accessResponses: AccessResponses) : Throwable(ac
 sealed class AccessResponse(
     val decision: AccessDecision,
     val accessControl: AccessKontrol,
-    val message: String?,
-    val code: String?
+    open val message: String?,
+    open val code: String?
 ) {
     /**
      * Convert response as boolean
@@ -142,8 +145,8 @@ open class GrantedResponse(
 
 open class DeniedResponse(
     accessControl: AccessKontrol,
-    message: String,
-    code: String
+    override val message: String,
+    override val code: String
 ) : AccessResponse(AccessDecision.DENIED, accessControl, message, code)
 
 class GrantedResponses(
@@ -159,7 +162,7 @@ class DeniedResponses(
     accessResponses: List<AccessResponse>
 ) : AccessResponses by accessResponses,
     DeniedResponse(
-        accessResponses.deniedResponses.first().accessControl,
-        accessResponses.deniedResponses.firstOrNull()?.message ?: error("DeniedResponses cannot be empty"),
-        accessResponses.deniedResponses.firstOrNull()?.code ?: error("DeniedResponses cannot be empty")
+        accessResponses.deniedResponses.firstOrNull()?.accessControl ?: error("DeniedResponses cannot be empty"),
+        accessResponses.deniedResponses.first().message,
+        accessResponses.deniedResponses.first().code
     )

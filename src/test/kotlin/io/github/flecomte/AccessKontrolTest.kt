@@ -98,6 +98,7 @@ class AccessKontrolTest {
             assertEquals(null, getErrorCode("notExists")?.code)
             assertEquals("KO2", getMessages().last())
             assertEquals("KO", getFirstMessage())
+            assertEquals("ko", deniedResponses.firstOrNull()?.code)
         }
     }
 
@@ -122,6 +123,13 @@ class AccessKontrolTest {
     fun `test getFirstDecisionResponse on denied`() {
         AccessControlSample()
             .canView(listOf(MyObject("granted"), MyObject("denied")), User(""))
+            .getFirstDecisionResponse()
+            .run {
+                assertFalse(decision.toBoolean())
+            }
+
+        AccessControlSample()
+            .canView(listOf(MyObject("denied"), MyObject("granted")), User(""))
             .getFirstDecisionResponse()
             .run {
                 assertFalse(decision.toBoolean())
