@@ -60,6 +60,14 @@ class AccessKontrolTest {
     }
 
     @Test
+    fun `test empty canAllGranted`() {
+        assertThrows(NoDecision::class.java) {
+            AccessControlSample()
+                .canView(listOf(), User(""))
+        }
+    }
+
+    @Test
     fun `test CanAllDenied`() {
         AccessControlSample().run {
             assertFalse(
@@ -127,13 +135,14 @@ class AccessKontrolTest {
             .run {
                 assertFalse(decision.toBoolean())
             }
+    }
 
-        AccessControlSample()
-            .canView(listOf(MyObject("denied"), MyObject("granted")), User(""))
-            .getFirstDecisionResponse()
-            .run {
-                assertFalse(decision.toBoolean())
-            }
+    @Test
+    fun `test getFirstDecisionResponse on empty`() {
+        assertThrows(NoDecision::class.java) {
+            listOf<AccessResponse>()
+                .getFirstDecisionResponse()
+        }
     }
 
     @Test

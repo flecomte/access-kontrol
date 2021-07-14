@@ -27,9 +27,13 @@ abstract class AccessKontrol {
 
     /**
      * A helper to convert a list of subject into one response
+     *
+     * @throws [NoDecision] if the list of responses is empty
      */
     protected fun <S : List<T>, T> canAll(items: S, action: (T) -> AccessResponse): AccessResponses = items
-        .map { action(it) }.let { responses ->
+        .ifEmpty { throw NoDecision() }
+        .map { action(it) }
+        .let { responses ->
             if (responses.any { it is DeniedResponse }) {
                 DeniedResponses(responses)
             } else {
@@ -50,9 +54,12 @@ typealias AccessResponses = List<AccessResponse>
 /**
  * Check all responses and return DENIED if one is DENIED
  *
- * If the list of responses is empty, return GRANTED
+ * @throws [NoDecision] if the list of responses is empty
  */
-fun AccessResponses.getFirstDecisionResponse(): AccessResponse = this.firstOrNull { it.decision == AccessDecision.DENIED } ?: this.first { it.decision == AccessDecision.GRANTED }
+fun AccessResponses.getFirstDecisionResponse(): AccessResponse {
+    ifEmpty { throw NoDecision() }
+    return firstOrNull { it.decision == AccessDecision.DENIED } ?: first()
+}
 
 /**
  * Throw an Exception if one response is DENIED
@@ -166,3 +173,5 @@ class DeniedResponses(
         accessResponses.deniedResponses.first().message,
         accessResponses.deniedResponses.first().code
     )
+
+class NoDecision : RuntimeException("No decision has been taken")
