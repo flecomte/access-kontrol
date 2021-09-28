@@ -4,7 +4,7 @@ Helpers to create a simple Access Control in kotlin
 [![Tests](https://github.com/flecomte/access-kontrol/actions/workflows/tests.yml/badge.svg)](https://github.com/flecomte/access-kontrol/actions/workflows/tests.yml)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-kontrol&metric=coverage)](https://sonarcloud.io/dashboard?id=flecomte_access-kontrol)
 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-kontrol&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=flecomte_access-kontrol)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-kontrol&metric=alert_status)](https://sonarcloud.io/dashboard?id=flecomte_access-kontrol)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=flecomte_access-kontrol&metric=ncloc)](https://sonarcloud.io/dashboard?id=flecomte_access-kontrol)
 
 
